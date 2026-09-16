@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Observatorio IA - Impacto Ambiental</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-900 text-white font-sans antialiased p-4 md:p-8">
+    
+    <!-- Encabezado -->
+    <header class="flex flex-col md:flex-row justify-between items-center border-b border-gray-700 pb-4 mb-8">
+        <h1 class="text-2xl md:text-3xl font-bold text-green-400 mb-4 md:mb-0">🌿 Observatorio IA Iberoamericano</h1>
+        <span class="bg-green-600 text-xs font-bold px-3 py-2 rounded-full animate-pulse shadow-[0_0_10px_rgba(34,197,94,0.8)]">
+            Sincronizado vía N8N (En vivo)
+        </span>
+    </header>
+
+    <!-- Panel Principal -->
+    <main>
+        <h2 class="text-xl font-semibold mb-6 text-gray-300">Consumo estimado en fase de entrenamiento</h2>
+        
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+            
+            <!-- Tarjeta GPT-3 -->
+            <div class="bg-gray-800 p-6 rounded-lg shadow-lg border border-gray-700 hover:border-blue-500 transition-colors">
+                <h3 class="text-2xl font-bold text-blue-400 mb-1">GPT-3</h3>
+                <p class="text-xs text-gray-400 mb-4">OpenAI (175B Parámetros)</p>
+                <p class="text-lg mb-2">⚡ Energía: <span class="font-bold text-yellow-400">1,287 MWh</span></p>
+                <p class="text-lg">💧 Agua: <span class="font-bold text-blue-300">700,000 Litros</span></p>
+            </div>
+
+            <!-- Tarjeta GPT-4 -->
+            <div class="bg-gray-800 p-6 rounded-lg shadow-lg border border-gray-700 hover:border-blue-500 transition-colors">
+                <h3 class="text-2xl font-bold text-blue-500 mb-1">GPT-4</h3>
+                <p class="text-xs text-gray-400 mb-4">OpenAI (MoE Estimado)</p>
+                <p class="text-lg mb-2">⚡ Energía: <span class="font-bold text-yellow-400">~62,000 MWh</span></p>
+                <p class="text-lg">💧 Agua: <span class="font-bold text-blue-300">~25 Millones Litros</span></p>
+            </div>
+
+            <!-- Tarjeta Gemini -->
+            <div class="bg-gray-800 p-6 rounded-lg shadow-lg border border-gray-700 hover:border-purple-500 transition-colors">
+                <h3 class="text-2xl font-bold text-purple-400 mb-1">Gemini Ultra</h3>
+                <p class="text-xs text-gray-400 mb-4">Google DeepMind</p>
+                <p class="text-lg mb-2">⚡ Energía: <span class="font-bold text-yellow-400">Multi-DC</span></p>
+                <p class="text-lg">💧 Agua: <span class="font-bold text-blue-300">Enfriamiento Híbrido</span></p>
+            </div>
+        </div>
+
+        <!-- Impacto Regional Interactivo -->
+        <h2 class="text-xl font-semibold mb-4 text-gray-300">Impacto y Equivalencia en la Región (Selecciona un país)</h2>
+        <div class="bg-gray-800 p-6 rounded-lg shadow-lg border border-gray-700 min-h-[160px]">
+            
+            <!-- Botones de Países -->
+            <div class="flex flex-wrap gap-3 mb-6" id="country-buttons">
+                <button onclick="changeCountry('colombia', this)" class="country-btn bg-green-600 px-3 py-1 rounded text-sm font-semibold border border-green-500 hover:bg-green-500 transition-colors">🇨🇴 Colombia</button>
+                <button onclick="changeCountry('panama', this)" class="country-btn bg-gray-700 px-3 py-1 rounded text-sm font-semibold border border-gray-600 hover:bg-gray-600 transition-colors">🇵🇦 Panamá</button>
+                <button onclick="changeCountry('venezuela', this)" class="country-btn bg-gray-700 px-3 py-1 rounded text-sm font-semibold border border-gray-600 hover:bg-gray-600 transition-colors">🇻🇪 Venezuela</button>
+                <button onclick="changeCountry('mexico', this)" class="country-btn bg-gray-700 px-3 py-1 rounded text-sm font-semibold border border-gray-600 hover:bg-gray-600 transition-colors">🇲🇽 México</button>
+                <button onclick="changeCountry('espana', this)" class="country-btn bg-gray-700 px-3 py-1 rounded text-sm font-semibold border border-gray-600 hover:bg-gray-600 transition-colors">🇪🇸 España</button>
+                <button onclick="changeCountry('bolivia', this)" class="country-btn bg-gray-700 px-3 py-1 rounded text-sm font-semibold border border-gray-600 hover:bg-gray-600 transition-colors">🇧🇴 Bolivia</button>
+            </div>
+
+            <!-- Texto Dinámico -->
+            <p id="impact-text" class="text-gray-300 text-lg transition-opacity duration-300">
+                El consumo de entrenamiento de GPT-4 equivale a la energía eléctrica utilizada por <strong class="text-white">miles de hogares en Colombia</strong> durante todo un año, poniendo a prueba los lineamientos ambientales del PUC.
+            </p>
+        </div>
+    </main>
+
+    <!-- Script de Interactividad -->
+    <script>
+        const data = {
+            'colombia': 'El consumo de entrenamiento de GPT-4 equivale a la energía eléctrica utilizada por <strong class="text-white">miles de hogares en Colombia</strong> durante todo un año, poniendo a prueba los lineamientos ambientales del PUC.',
+            'panama': 'En <strong class="text-white">Panamá</strong>, el gasto hídrico para refrigerar estos modelos competiría directamente con las reservas de agua dulce necesarias para la operación continua del Canal durante temporadas de sequía.',
+            'venezuela': 'Para <strong class="text-white">Venezuela</strong>, la demanda energética pico de un centro de datos de IA equivaldría a la carga de múltiples complejos industriales, tensando la red eléctrica nacional.',
+            'mexico': 'Entrenar IAs generativas requiere millones de litros de agua dulce, lo que agravaría severamente el estrés hídrico y las sequías en las zonas industriales del norte de <strong class="text-white">México</strong>.',
+            'espana': 'En <strong class="text-white">España</strong>, el altísimo coste energético de los LLMs choca con los objetivos de la Unión Europea para la transición ecológica, exigiendo fuentes 100% renovables para los Data Centers.',
+            'bolivia': 'Para <strong class="text-white">Bolivia</strong>, la adopción de estas tecnologías implicaría un salto drástico en la huella de carbono, superando el consumo anual de energía de varias de sus regiones en desarrollo.'
+        };
+
+        function changeCountry(countryKey, element) {
+            // 1. Cambiar el texto
+            document.getElementById('impact-text').innerHTML = data[countryKey];
+            
+            // 2. Reiniciar todos los botones al color gris
+            let buttons = document.querySelectorAll('.country-btn');
+            buttons.forEach(btn => {
+                btn.classList.remove('bg-green-600', 'border-green-500', 'hover:bg-green-500');
+                btn.classList.add('bg-gray-700', 'border-gray-600', 'hover:bg-gray-600');
+            });
+
+            // 3. Iluminar de verde el botón seleccionado
+            element.classList.remove('bg-gray-700', 'border-gray-600', 'hover:bg-gray-600');
+            element.classList.add('bg-green-600', 'border-green-500', 'hover:bg-green-500');
+        }
+    </script>
+</body>
+</html>
