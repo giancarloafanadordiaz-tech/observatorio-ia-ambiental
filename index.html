@@ -1,99 +1,266 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Observatorio IA - Impacto Ambiental</title>
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body class="bg-gray-900 text-white font-sans antialiased p-4 md:p-8">
-    
+
+<body class="bg-gray-900 text-white font-sans antialiased p-4 md:p-8" onload="initDashboard()">
+
     <!-- Encabezado -->
-    <header class="flex flex-col md:flex-row justify-between items-center border-b border-gray-700 pb-4 mb-8">
-        <h1 class="text-2xl md:text-3xl font-bold text-green-400 mb-4 md:mb-0">🌿 Observatorio IA Iberoamericano</h1>
-        <span class="bg-green-600 text-xs font-bold px-3 py-2 rounded-full animate-pulse shadow-[0_0_10px_rgba(34,197,94,0.8)]">
-            Sincronizado vía N8N (En vivo)
-        </span>
+    <header class="flex flex-col md:flex-row justify-between items-center border-b border-gray-700 pb-4 mb-6">
+        <div>
+            <h1 class="text-2xl md:text-3xl font-bold text-green-400 mb-2">🌿 Observatorio IA Iberoamericano</h1>
+            <p class="text-gray-400 text-sm">Monitoreo y Equivalencia de Impacto Ambiental en Modelos Generativos</p>
+        </div>
+        <div class="mt-4 md:mt-0 flex flex-col items-end">
+            <span
+                class="bg-green-600 text-xs font-bold px-3 py-2 rounded-full animate-pulse shadow-[0_0_10px_rgba(34,197,94,0.8)] mb-2">
+                🟢 N8N Pipeline Activo
+            </span>
+            <p class="text-xs text-gray-400">Última act: <span id="clock"></span></p>
+        </div>
     </header>
 
-    <!-- Panel Principal -->
+    <!-- Contador en Tiempo Real (Consultas Globales) -->
+    <section
+        class="mb-8 bg-gray-800 p-4 rounded-lg border border-gray-700 shadow-[0_0_15px_rgba(0,0,0,0.5)] flex flex-col md:flex-row justify-around items-center text-center">
+        <div class="mb-4 md:mb-0">
+            <p class="text-gray-400 text-sm uppercase tracking-wide">Consumo global por consultas (Hoy)</p>
+            <p class="text-3xl font-mono text-yellow-400 font-bold"><span id="live-energy">14,532,100</span> <span
+                    class="text-lg">kWh</span></p>
+        </div>
+        <div>
+            <p class="text-gray-400 text-sm uppercase tracking-wide">Agua evaporada por refrigeración (Hoy)</p>
+            <p class="text-3xl font-mono text-blue-400 font-bold"><span id="live-water">8,210,450</span> <span
+                    class="text-lg">Litros</span></p>
+        </div>
+    </section>
+
+    <!-- Panel Principal de Modelos -->
     <main>
-        <h2 class="text-xl font-semibold mb-6 text-gray-300">Consumo estimado en fase de entrenamiento</h2>
-        
+        <div class="flex justify-between items-end mb-4">
+            <h2 class="text-xl font-semibold text-gray-300">Costo Base de Entrenamiento y Equivalencia Local</h2>
+        </div>
+
         <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-            
+
             <!-- Tarjeta GPT-3 -->
-            <div class="bg-gray-800 p-6 rounded-lg shadow-lg border border-gray-700 hover:border-blue-500 transition-colors">
-                <h3 class="text-2xl font-bold text-blue-400 mb-1">GPT-3</h3>
+            <div
+                class="bg-gray-800 p-5 rounded-lg shadow-lg border border-gray-700 hover:border-gray-500 transition-colors relative overflow-hidden">
+                <div class="absolute top-0 left-0 w-full h-1 bg-gray-500"></div>
+                <h3 class="text-2xl font-bold text-gray-300 mb-1">GPT-3</h3>
                 <p class="text-xs text-gray-400 mb-4">OpenAI (175B Parámetros)</p>
-                <p class="text-lg mb-2">⚡ Energía: <span class="font-bold text-yellow-400">1,287 MWh</span></p>
-                <p class="text-lg">💧 Agua: <span class="font-bold text-blue-300">700,000 Litros</span></p>
+                <p class="text-md mb-1">⚡ Energía: <span class="font-bold text-yellow-400">1,287 MWh</span></p>
+                <p class="text-md mb-4">💧 Agua: <span class="font-bold text-blue-300">700,000 Litros</span></p>
+                <div class="bg-gray-900 p-3 rounded border border-gray-700">
+                    <p class="text-xs text-gray-400 uppercase">Equivalencia en país sel.</p>
+                    <p id="eq-gpt3" class="text-sm font-bold text-green-400">Suministro de 2,500 hogares/mes</p>
+                </div>
             </div>
 
             <!-- Tarjeta GPT-4 -->
-            <div class="bg-gray-800 p-6 rounded-lg shadow-lg border border-gray-700 hover:border-blue-500 transition-colors">
-                <h3 class="text-2xl font-bold text-blue-500 mb-1">GPT-4</h3>
+            <div
+                class="bg-gray-800 p-5 rounded-lg shadow-lg border border-gray-700 hover:border-blue-500 transition-colors relative overflow-hidden">
+                <div class="absolute top-0 left-0 w-full h-1 bg-blue-500"></div>
+                <h3 class="text-2xl font-bold text-blue-400 mb-1">GPT-4</h3>
                 <p class="text-xs text-gray-400 mb-4">OpenAI (MoE Estimado)</p>
-                <p class="text-lg mb-2">⚡ Energía: <span class="font-bold text-yellow-400">~62,000 MWh</span></p>
-                <p class="text-lg">💧 Agua: <span class="font-bold text-blue-300">~25 Millones Litros</span></p>
+                <p class="text-md mb-1">⚡ Energía: <span class="font-bold text-yellow-400">~62,000 MWh</span></p>
+                <p class="text-md mb-4">💧 Agua: <span class="font-bold text-blue-300">~25 Millones Litros</span></p>
+                <div class="bg-gray-900 p-3 rounded border border-gray-700">
+                    <p class="text-xs text-gray-400 uppercase">Equivalencia en país sel.</p>
+                    <p id="eq-gpt4" class="text-sm font-bold text-green-400">Suministro de 120,000 hogares/mes</p>
+                </div>
             </div>
 
-            <!-- Tarjeta Gemini -->
-            <div class="bg-gray-800 p-6 rounded-lg shadow-lg border border-gray-700 hover:border-purple-500 transition-colors">
+            <!-- Tarjeta Gemini Ultra -->
+            <div
+                class="bg-gray-800 p-5 rounded-lg shadow-lg border border-gray-700 hover:border-purple-500 transition-colors relative overflow-hidden">
+                <div class="absolute top-0 left-0 w-full h-1 bg-purple-500"></div>
                 <h3 class="text-2xl font-bold text-purple-400 mb-1">Gemini Ultra</h3>
-                <p class="text-xs text-gray-400 mb-4">Google DeepMind</p>
-                <p class="text-lg mb-2">⚡ Energía: <span class="font-bold text-yellow-400">Multi-DC</span></p>
-                <p class="text-lg">💧 Agua: <span class="font-bold text-blue-300">Enfriamiento Híbrido</span></p>
+                <p class="text-xs text-gray-400 mb-4">Google DeepMind (TPU v4/v5)</p>
+                <p class="text-md mb-1">⚡ Energía: <span class="font-bold text-yellow-400">~50,000 MWh</span></p>
+                <p class="text-md mb-4">💧 Agua: <span class="font-bold text-blue-300">~20 Millones Litros</span></p>
+                <div class="bg-gray-900 p-3 rounded border border-gray-700">
+                    <p class="text-xs text-gray-400 uppercase">Equivalencia en país sel.</p>
+                    <p id="eq-gemini" class="text-sm font-bold text-green-400">Suministro de 98,000 hogares/mes</p>
+                </div>
             </div>
         </div>
 
-        <!-- Impacto Regional Interactivo -->
-        <h2 class="text-xl font-semibold mb-4 text-gray-300">Impacto y Equivalencia en la Región (Selecciona un país)</h2>
-        <div class="bg-gray-800 p-6 rounded-lg shadow-lg border border-gray-700 min-h-[160px]">
-            
-            <!-- Botones de Países -->
-            <div class="flex flex-wrap gap-3 mb-6" id="country-buttons">
-                <button onclick="changeCountry('colombia', this)" class="country-btn bg-green-600 px-3 py-1 rounded text-sm font-semibold border border-green-500 hover:bg-green-500 transition-colors">🇨🇴 Colombia</button>
-                <button onclick="changeCountry('panama', this)" class="country-btn bg-gray-700 px-3 py-1 rounded text-sm font-semibold border border-gray-600 hover:bg-gray-600 transition-colors">🇵🇦 Panamá</button>
-                <button onclick="changeCountry('venezuela', this)" class="country-btn bg-gray-700 px-3 py-1 rounded text-sm font-semibold border border-gray-600 hover:bg-gray-600 transition-colors">🇻🇪 Venezuela</button>
-                <button onclick="changeCountry('mexico', this)" class="country-btn bg-gray-700 px-3 py-1 rounded text-sm font-semibold border border-gray-600 hover:bg-gray-600 transition-colors">🇲🇽 México</button>
-                <button onclick="changeCountry('espana', this)" class="country-btn bg-gray-700 px-3 py-1 rounded text-sm font-semibold border border-gray-600 hover:bg-gray-600 transition-colors">🇪🇸 España</button>
-                <button onclick="changeCountry('bolivia', this)" class="country-btn bg-gray-700 px-3 py-1 rounded text-sm font-semibold border border-gray-600 hover:bg-gray-600 transition-colors">🇧🇴 Bolivia</button>
+        <!-- Filtro Interactivo por Países -->
+        <h2 class="text-xl font-semibold mb-4 text-gray-300">Seleccionar Región de Análisis</h2>
+        <div class="bg-gray-800 p-6 rounded-lg shadow-lg border border-gray-700 mb-8">
+            <div class="flex flex-wrap gap-3 mb-6">
+                <button onclick="changeCountry('colombia', this)"
+                    class="country-btn bg-green-600 px-4 py-2 rounded text-sm font-bold border border-green-500 hover:bg-green-500 transition-colors">🇨🇴
+                    Colombia</button>
+                <button onclick="changeCountry('panama', this)"
+                    class="country-btn bg-gray-700 px-4 py-2 rounded text-sm font-bold border border-gray-600 hover:bg-gray-600 transition-colors">🇵🇦
+                    Panamá</button>
+                <button onclick="changeCountry('venezuela', this)"
+                    class="country-btn bg-gray-700 px-4 py-2 rounded text-sm font-bold border border-gray-600 hover:bg-gray-600 transition-colors">🇻🇪
+                    Venezuela</button>
+                <button onclick="changeCountry('mexico', this)"
+                    class="country-btn bg-gray-700 px-4 py-2 rounded text-sm font-bold border border-gray-600 hover:bg-gray-600 transition-colors">🇲🇽
+                    México</button>
+                <button onclick="changeCountry('espana', this)"
+                    class="country-btn bg-gray-700 px-4 py-2 rounded text-sm font-bold border border-gray-600 hover:bg-gray-600 transition-colors">🇪🇸
+                    España</button>
+                <button onclick="changeCountry('bolivia', this)"
+                    class="country-btn bg-gray-700 px-4 py-2 rounded text-sm font-bold border border-gray-600 hover:bg-gray-600 transition-colors">🇧🇴
+                    Bolivia</button>
             </div>
-
-            <!-- Texto Dinámico -->
-            <p id="impact-text" class="text-gray-300 text-lg transition-opacity duration-300">
-                El consumo de entrenamiento de GPT-4 equivale a la energía eléctrica utilizada por <strong class="text-white">miles de hogares en Colombia</strong> durante todo un año, poniendo a prueba los lineamientos ambientales del PUC.
+            <p id="impact-text" class="text-gray-300 text-lg border-l-4 border-green-500 pl-4">
+                El entrenamiento de GPT-4 equivale a la energía eléctrica utilizada por <strong
+                    class="text-white">120,000 hogares en Colombia</strong> durante todo un mes. Si sumamos la
+                evaporación de agua, choca directamente con las políticas del PUC ambiental.
             </p>
+        </div>
+
+        <!-- Consola N8N Backend Simulada -->
+        <h2 class="text-xl font-semibold mb-2 text-gray-300">Log de Actualización Automatizada (N8N Backend)</h2>
+        <div class="bg-black p-4 rounded-lg border border-gray-700 font-mono text-xs text-green-500 h-32 overflow-y-auto"
+            id="n8n-console">
+            <p>> Inicializando Webhooks de N8N...</p>
+            <p>> Conectando a bases de datos de sostenibilidad globales...</p>
         </div>
     </main>
 
-    <!-- Script de Interactividad -->
     <script>
-        const data = {
-            'colombia': 'El consumo de entrenamiento de GPT-4 equivale a la energía eléctrica utilizada por <strong class="text-white">miles de hogares en Colombia</strong> durante todo un año, poniendo a prueba los lineamientos ambientales del PUC.',
-            'panama': 'En <strong class="text-white">Panamá</strong>, el gasto hídrico para refrigerar estos modelos competiría directamente con las reservas de agua dulce necesarias para la operación continua del Canal durante temporadas de sequía.',
-            'venezuela': 'Para <strong class="text-white">Venezuela</strong>, la demanda energética pico de un centro de datos de IA equivaldría a la carga de múltiples complejos industriales, tensando la red eléctrica nacional.',
-            'mexico': 'Entrenar IAs generativas requiere millones de litros de agua dulce, lo que agravaría severamente el estrés hídrico y las sequías en las zonas industriales del norte de <strong class="text-white">México</strong>.',
-            'espana': 'En <strong class="text-white">España</strong>, el altísimo coste energético de los LLMs choca con los objetivos de la Unión Europea para la transición ecológica, exigiendo fuentes 100% renovables para los Data Centers.',
-            'bolivia': 'Para <strong class="text-white">Bolivia</strong>, la adopción de estas tecnologías implicaría un salto drástico en la huella de carbono, superando el consumo anual de energía de varias de sus regiones en desarrollo.'
+        // Datos dinámicos por país
+        const countryData = {
+            'colombia': {
+                text: 'El entrenamiento de GPT-4 equivale a la energía eléctrica utilizada por <strong class="text-white">120,000 hogares en Colombia</strong> durante todo un mes. Si sumamos la evaporación de agua, choca directamente con las políticas del PUC ambiental.',
+                gpt3: 'Suministro de 2,500 hogares/mes',
+                gpt4: 'Suministro de 120,000 hogares/mes',
+                gemini: 'Suministro de 98,000 hogares/mes'
+            },
+            'panama': {
+                text: 'En <strong class="text-white">Panamá</strong>, el gasto hídrico de 25 millones de litros para refrigerar GPT-4 competiría con las reservas de agua dulce esenciales para la operación del Canal en temporada seca.',
+                gpt3: 'Suministro de 1,800 hogares/mes',
+                gpt4: 'Suministro de 85,000 hogares/mes',
+                gemini: 'Suministro de 70,000 hogares/mes'
+            },
+            'venezuela': {
+                text: 'Para <strong class="text-white">Venezuela</strong>, sumar 62,000 MWh a la red (lo que gastó GPT-4) equivaldría a la carga de múltiples complejos industriales, tensionando gravemente el Sistema Eléctrico Nacional.',
+                gpt3: 'Suministro de 3,000 hogares/mes',
+                gpt4: 'Suministro de 150,000 hogares/mes',
+                gemini: 'Suministro de 120,000 hogares/mes'
+            },
+            'mexico': {
+                text: 'Entrenar IAs requiere evaporar millones de litros de agua pura. En <strong class="text-white">México</strong>, esto agravaría las severas crisis hídricas y sequías que afectan al sector industrial del norte del país.',
+                gpt3: 'Suministro de 4,000 hogares/mes',
+                gpt4: 'Suministro de 190,000 hogares/mes',
+                gemini: 'Suministro de 155,000 hogares/mes'
+            },
+            'espana': {
+                text: 'En <strong class="text-white">España</strong>, el altísimo coste energético de los LLMs choca frontalmente con los objetivos de la Unión Europea para la transición ecológica, exigiendo Data Centers de fuentes 100% renovables.',
+                gpt3: 'Suministro de 3,500 hogares/mes',
+                gpt4: 'Suministro de 170,000 hogares/mes',
+                gemini: 'Suministro de 135,000 hogares/mes'
+            },
+            'bolivia': {
+                text: 'Para <strong class="text-white">Bolivia</strong>, la integración de Data Centers masivos de IA representaría un incremento drástico en su huella de carbono, superando el consumo histórico de regiones enteras en desarrollo.',
+                gpt3: 'Suministro de 2,200 hogares/mes',
+                gpt4: 'Suministro de 105,000 hogares/mes',
+                gemini: 'Suministro de 85,000 hogares/mes'
+            }
         };
 
+        // Función para cambiar de país
         function changeCountry(countryKey, element) {
-            // 1. Cambiar el texto
-            document.getElementById('impact-text').innerHTML = data[countryKey];
-            
-            // 2. Reiniciar todos los botones al color gris
+            // Actualizar el texto principal
+            document.getElementById('impact-text').innerHTML = countryData[countryKey].text;
+
+            // Actualizar las cifras de las tarjetas
+            document.getElementById('eq-gpt3').innerText = countryData[countryKey].gpt3;
+            document.getElementById('eq-gpt4').innerText = countryData[countryKey].gpt4;
+            document.getElementById('eq-gemini').innerText = countryData[countryKey].gemini;
+
+            // Efecto visual en las tarjetas
+            const eqs = ['eq-gpt3', 'eq-gpt4', 'eq-gemini'];
+            eqs.forEach(id => {
+                let el = document.getElementById(id);
+                el.classList.remove('text-green-400');
+                el.classList.add('text-white');
+                setTimeout(() => {
+                    el.classList.remove('text-white');
+                    el.classList.add('text-green-400');
+                }, 300);
+            });
+
+            // Actualizar botones
             let buttons = document.querySelectorAll('.country-btn');
             buttons.forEach(btn => {
                 btn.classList.remove('bg-green-600', 'border-green-500', 'hover:bg-green-500');
                 btn.classList.add('bg-gray-700', 'border-gray-600', 'hover:bg-gray-600');
             });
-
-            // 3. Iluminar de verde el botón seleccionado
             element.classList.remove('bg-gray-700', 'border-gray-600', 'hover:bg-gray-600');
             element.classList.add('bg-green-600', 'border-green-500', 'hover:bg-green-500');
+
+            // Enviar log a la consola N8N
+            addN8NLog(`> Filtro aplicado: Extrayendo métricas de impacto para ${countryKey.toUpperCase()}...`);
+        }
+
+        // Inicialización
+        function initDashboard() {
+            startLiveCounters();
+            startN8NSimulation();
+            updateClock();
+            setInterval(updateClock, 1000);
+        }
+
+        // Reloj de la cabecera
+        function updateClock() {
+            const now = new Date();
+            document.getElementById('clock').innerText = now.toLocaleTimeString();
+        }
+
+        // Contadores en tiempo real (Simulación de consumo de APIs)
+        function startLiveCounters() {
+            let energy = 14532100;
+            let water = 8210450;
+
+            setInterval(() => {
+                // Sube la energía y el agua aleatoriamente cada segundo
+                energy += Math.floor(Math.random() * 15) + 5;
+                water += Math.floor(Math.random() * 8) + 2;
+
+                document.getElementById('live-energy').innerText = energy.toLocaleString();
+                document.getElementById('live-water').innerText = water.toLocaleString();
+            }, 1000);
+        }
+
+        // Simulación de Consola de Automatización N8N
+        const logs = [
+            "Ejecutando nodo HTTP Request (OpenAI API)...",
+            "Extrayendo telemetría de consumo energético...",
+            "Nodo Scraper: Obteniendo Google DeepMind Sustainability Report...",
+            "Parseando JSON de consumo hídrico de TPU v5...",
+            "Actualizando base de datos en Firebase Studio...",
+            "Calculando equivalencias regionales con métricas del Banco Mundial...",
+            "Sincronización exitosa. Esperando próximo ciclo..."
+        ];
+
+        function startN8NSimulation() {
+            setInterval(() => {
+                const randomLog = logs[Math.floor(Math.random() * logs.length)];
+                addN8NLog(`> ${new Date().toLocaleTimeString()} - [N8N Workflow] ${randomLog}`);
+            }, 4500); // Agrega un log cada 4.5 segundos
+        }
+
+        function addN8NLog(msg) {
+            const consoleDiv = document.getElementById('n8n-console');
+            const newLog = document.createElement('p');
+            newLog.innerText = msg;
+            consoleDiv.appendChild(newLog);
+            consoleDiv.scrollTop = consoleDiv.scrollHeight; // Auto-scroll al final
         }
     </script>
 </body>
+
 </html>
